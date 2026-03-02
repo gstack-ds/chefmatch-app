@@ -1,6 +1,6 @@
 import { Database } from '../models/database';
-import { ChefTier, ServiceModel, BackgroundCheckStatus, SwipeDirection } from '../config/constants';
-import { UserProfile, ChefProfile, MenuItem, ChefAvailability, ConsumerProfile, Swipe, Conversation } from '../models/types';
+import { ChefTier, ServiceModel, BackgroundCheckStatus, SwipeDirection, BookingStatus, GroceryArrangement } from '../config/constants';
+import { UserProfile, ChefProfile, MenuItem, ChefAvailability, ConsumerProfile, Swipe, Conversation, Booking, Message, Review } from '../models/types';
 
 type UserRow = Database['public']['Tables']['users']['Row'];
 type ChefProfileRow = Database['public']['Tables']['chef_profiles']['Row'];
@@ -9,6 +9,9 @@ type ChefAvailabilityRow = Database['public']['Tables']['chef_availability']['Ro
 type ConsumerProfileRow = Database['public']['Tables']['consumer_profiles']['Row'];
 type SwipeRow = Database['public']['Tables']['swipes']['Row'];
 type ConversationRow = Database['public']['Tables']['conversations']['Row'];
+type BookingRow = Database['public']['Tables']['bookings']['Row'];
+type MessageRow = Database['public']['Tables']['messages']['Row'];
+type ReviewRow = Database['public']['Tables']['reviews']['Row'];
 
 export function mapUserRow(row: UserRow): UserProfile {
   return {
@@ -105,6 +108,51 @@ export function mapConversationRow(row: ConversationRow): Conversation {
     id: row.id,
     consumerId: row.consumer_id,
     chefId: row.chef_id,
+    createdAt: row.created_at,
+  };
+}
+
+export function mapBookingRow(row: BookingRow): Booking {
+  return {
+    id: row.id,
+    consumerId: row.consumer_id,
+    chefId: row.chef_id,
+    conversationId: row.conversation_id,
+    status: row.status as BookingStatus,
+    serviceModel: row.service_model as ServiceModel,
+    eventDate: row.event_date,
+    partySize: row.party_size,
+    occasion: row.occasion,
+    specialRequests: row.special_requests,
+    groceryArrangement: row.grocery_arrangement as GroceryArrangement,
+    totalPrice: row.total_price,
+    locationAddress: row.location_address,
+    locationLatitude: row.location_latitude,
+    locationLongitude: row.location_longitude,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+export function mapMessageRow(row: MessageRow): Message {
+  return {
+    id: row.id,
+    conversationId: row.conversation_id,
+    senderId: row.sender_id,
+    content: row.content,
+    readAt: row.read_at,
+    createdAt: row.created_at,
+  };
+}
+
+export function mapReviewRow(row: ReviewRow): Review {
+  return {
+    id: row.id,
+    bookingId: row.booking_id,
+    reviewerId: row.reviewer_id,
+    revieweeId: row.reviewee_id,
+    rating: row.rating,
+    text: row.text,
     createdAt: row.created_at,
   };
 }

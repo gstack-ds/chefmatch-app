@@ -8,8 +8,10 @@ import {
   Dimensions,
   ActivityIndicator,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ChefTier, SwipeDirection } from '../../config/constants';
 import { MenuItem, DiscoverableChef } from '../../models/types';
 import { getMenuItems } from '../../services/menu-service';
@@ -25,8 +27,13 @@ type ChefDetailRouteProp = RouteProp<
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
+type ParentNavProp = NativeStackNavigationProp<{
+  BookingRequest: { chefId: string; chefName: string; conversationId: string | null };
+}>;
+
 export default function ChefDetailScreen() {
   const route = useRoute<ChefDetailRouteProp>();
+  const navigation = useNavigation<ParentNavProp>();
   const { chef } = route.params;
   const { handleSwipe, getConflicts } = useDiscovery();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -137,6 +144,18 @@ export default function ChefDetailScreen() {
       </ScrollView>
 
       <View style={styles.footer}>
+        <TouchableOpacity
+          style={styles.bookButton}
+          onPress={() =>
+            navigation.navigate('BookingRequest', {
+              chefId: chef.id,
+              chefName: chef.displayName,
+              conversationId: null,
+            })
+          }
+        >
+          <Text style={styles.bookButtonText}>Request Booking</Text>
+        </TouchableOpacity>
         <ActionButtons
           onPass={() => handleSwipe(chef.id, SwipeDirection.PASS)}
           onLike={() => handleSwipe(chef.id, SwipeDirection.LIKE)}
@@ -287,5 +306,19 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     borderTopWidth: 1,
     borderTopColor: '#f3f4f6',
+  },
+  bookButton: {
+    backgroundColor: '#2563eb',
+    marginHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 4,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  bookButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });

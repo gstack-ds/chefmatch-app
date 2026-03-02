@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/use-auth';
 import { ChefOnboardingProvider, useChefOnboarding } from '../hooks/use-chef-onboarding';
 import ChefOnboardingNavigator from './ChefOnboardingNavigator';
 import ConsumerTabNavigator from './ConsumerTabNavigator';
-import PlaceholderChefHomeScreen from '../screens/chef/PlaceholderChefHomeScreen';
+import ChefTabNavigator from './ChefTabNavigator';
 
 export type AppStackParamList = {
   ConsumerTabs: undefined;
@@ -26,7 +26,7 @@ function ChefRouter() {
   }
 
   if (chefProfile?.isLive) {
-    return <PlaceholderChefHomeScreen />;
+    return <ChefTabNavigator />;
   }
 
   return <ChefOnboardingNavigator />;

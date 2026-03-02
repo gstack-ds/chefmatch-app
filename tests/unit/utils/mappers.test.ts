@@ -6,6 +6,9 @@ import {
   mapConsumerProfileRow,
   mapSwipeRow,
   mapConversationRow,
+  mapBookingRow,
+  mapMessageRow,
+  mapReviewRow,
 } from '../../../src/utils/mappers';
 import { mockUserRow, mockChefUserRow } from '../../fixtures/auth-fixtures';
 import {
@@ -18,6 +21,9 @@ import {
   mockSwipeRowLike,
   mockConversationRow,
 } from '../../fixtures/consumer-fixtures';
+import { mockBookingRowPending } from '../../fixtures/booking-fixtures';
+import { mockMessageRow } from '../../fixtures/message-fixtures';
+import { mockReviewRow } from '../../fixtures/review-fixtures';
 
 describe('mapUserRow', () => {
   it('maps a consumer user row to UserProfile', () => {
@@ -248,5 +254,105 @@ describe('mapConversationRow', () => {
     expect(result).not.toHaveProperty('consumer_id');
     expect(result).not.toHaveProperty('chef_id');
     expect(result).not.toHaveProperty('created_at');
+  });
+});
+
+describe('mapBookingRow', () => {
+  it('maps a booking row to Booking', () => {
+    const result = mapBookingRow(mockBookingRowPending);
+
+    expect(result).toEqual({
+      id: 'booking-1',
+      consumerId: 'consumer-profile-1',
+      chefId: 'chef-profile-1',
+      conversationId: 'conversation-1',
+      status: 'pending',
+      serviceModel: 'full_service',
+      eventDate: '2026-04-15T18:00:00.000Z',
+      partySize: 4,
+      occasion: 'Anniversary Dinner',
+      specialRequests: 'Nut-free, please.',
+      groceryArrangement: 'chef_provides',
+      totalPrice: null,
+      locationAddress: '123 Main St, Los Angeles, CA',
+      locationLatitude: 34.0522,
+      locationLongitude: -118.2437,
+      createdAt: '2026-03-01T00:00:00.000Z',
+      updatedAt: '2026-03-01T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapBookingRow(mockBookingRowPending);
+
+    expect(result).toHaveProperty('consumerId');
+    expect(result).toHaveProperty('chefId');
+    expect(result).toHaveProperty('conversationId');
+    expect(result).toHaveProperty('serviceModel');
+    expect(result).toHaveProperty('eventDate');
+    expect(result).toHaveProperty('partySize');
+    expect(result).toHaveProperty('specialRequests');
+    expect(result).toHaveProperty('groceryArrangement');
+    expect(result).toHaveProperty('totalPrice');
+    expect(result).toHaveProperty('locationAddress');
+    expect(result).not.toHaveProperty('consumer_id');
+    expect(result).not.toHaveProperty('chef_id');
+    expect(result).not.toHaveProperty('event_date');
+    expect(result).not.toHaveProperty('party_size');
+  });
+});
+
+describe('mapMessageRow', () => {
+  it('maps a message row to Message', () => {
+    const result = mapMessageRow(mockMessageRow);
+
+    expect(result).toEqual({
+      id: 'message-1',
+      conversationId: 'conversation-1',
+      senderId: 'user-123',
+      content: 'Hello, Chef Marco!',
+      readAt: null,
+      createdAt: '2026-03-02T10:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapMessageRow(mockMessageRow);
+
+    expect(result).toHaveProperty('conversationId');
+    expect(result).toHaveProperty('senderId');
+    expect(result).toHaveProperty('readAt');
+    expect(result).toHaveProperty('createdAt');
+    expect(result).not.toHaveProperty('conversation_id');
+    expect(result).not.toHaveProperty('sender_id');
+    expect(result).not.toHaveProperty('read_at');
+    expect(result).not.toHaveProperty('created_at');
+  });
+});
+
+describe('mapReviewRow', () => {
+  it('maps a review row to Review', () => {
+    const result = mapReviewRow(mockReviewRow);
+
+    expect(result).toEqual({
+      id: 'review-1',
+      bookingId: 'booking-1',
+      reviewerId: 'user-123',
+      revieweeId: 'chef-456',
+      rating: 5,
+      text: 'Incredible meal, highly recommend!',
+      createdAt: '2026-03-10T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapReviewRow(mockReviewRow);
+
+    expect(result).toHaveProperty('bookingId');
+    expect(result).toHaveProperty('reviewerId');
+    expect(result).toHaveProperty('revieweeId');
+    expect(result).not.toHaveProperty('booking_id');
+    expect(result).not.toHaveProperty('reviewer_id');
+    expect(result).not.toHaveProperty('reviewee_id');
   });
 });
