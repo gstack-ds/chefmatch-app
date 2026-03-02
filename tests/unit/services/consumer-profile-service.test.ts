@@ -19,6 +19,14 @@ function mockChainedQuery(data: unknown, error: unknown = null) {
   return chain;
 }
 
+function mockUpdateChain(error: unknown = null) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const chain: Record<string, any> = {};
+  chain.update = jest.fn().mockReturnValue(chain);
+  chain.eq = jest.fn().mockResolvedValue({ error });
+  return chain;
+}
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
@@ -56,5 +64,26 @@ describe('getConsumerProfile', () => {
     await expect(
       consumerProfileService.getConsumerProfile('bad-id'),
     ).rejects.toThrow('Consumer profile not found');
+  });
+});
+
+describe('updateConsumerProfile', () => {
+  it('updates consumer profile fields', async () => {
+    mockFrom.mockImplementation(() => mockUpdateChain());
+
+    await consumerProfileService.updateConsumerProfile('user-123', {
+      allergies: ['Milk', 'Eggs'],
+      dietary_restrictions: ['vegan'],
+    });
+
+    expect(mockFrom).toHaveBeenCalledWith('consumer_profiles');
+  });
+
+  it('throws on error', async () => {
+    mockFrom.mockImplementation(() => mockUpdateChain({ message: 'Update failed' }));
+
+    await expect(
+      consumerProfileService.updateConsumerProfile('user-123', { allergies: [] }),
+    ).rejects.toThrow('Update failed');
   });
 });

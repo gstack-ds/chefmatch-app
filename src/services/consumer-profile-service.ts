@@ -4,6 +4,7 @@ import { ConsumerProfile } from '../models/types';
 import { mapConsumerProfileRow } from '../utils/mappers';
 
 type ConsumerProfileRow = Database['public']['Tables']['consumer_profiles']['Row'];
+type ConsumerProfileUpdate = Database['public']['Tables']['consumer_profiles']['Update'];
 
 export async function getConsumerProfile(userId: string): Promise<ConsumerProfile> {
   const { data, error } = await supabase
@@ -17,4 +18,16 @@ export async function getConsumerProfile(userId: string): Promise<ConsumerProfil
   }
 
   return mapConsumerProfileRow(data);
+}
+
+export async function updateConsumerProfile(
+  userId: string,
+  updates: Partial<ConsumerProfileUpdate>,
+): Promise<void> {
+  const { error } = await supabase
+    .from('consumer_profiles')
+    .update(updates)
+    .eq('user_id', userId);
+
+  if (error) throw new Error(error.message);
 }

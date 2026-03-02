@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DiscoveryProvider } from '../hooks/use-discovery';
 import DiscoveryStackNavigator from './DiscoveryStackNavigator';
 import MessagingStackNavigator from './MessagingStackNavigator';
-import PlaceholderProfileScreen from '../screens/consumer/PlaceholderProfileScreen';
+import ProfileStackNavigator from './ProfileStackNavigator';
 
 export type ConsumerTabParamList = {
   DiscoveryTab: undefined;
@@ -51,7 +51,7 @@ export default function ConsumerTabNavigator() {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={PlaceholderProfileScreen}
+        component={ProfileStackNavigator}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => undefined,
