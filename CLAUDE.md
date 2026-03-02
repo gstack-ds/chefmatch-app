@@ -129,6 +129,6 @@ chefmatch/
 ## Current TODOs
 - [ ] Set up Supabase project and configure environment variables
 - [ ] Design database schema (users, chefs, consumers, bookings, reviews, messages)
-- [ ] Implement authentication flow (signup/login with Supabase Auth)
-- [ ] Build chef onboarding screens (profile creation, photo upload, menu setup)
+- [x] Implement authentication flow (signup/login with Supabase Auth)
+- [x] Build chef onboarding screens (profile creation, photo upload, menu setup)
 - [ ] Build swipe-based discovery UI
