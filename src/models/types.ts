@@ -130,3 +130,16 @@ export interface Review {
   text: string;
   createdAt: string;
 }
+
+export interface DiscoverableChef extends ChefProfile {
+  displayName: string;
+  avatarUrl: string | null;
+}
+
+export interface DiscoveryFilters {
+  cuisines: string[];
+  budgetMin: number | null;
+  budgetMax: number | null;
+  tier: ChefTier | null;
+  dietaryRestrictions: string[];
+}
