@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import PlaceholderChefHomeScreen from '../screens/chef/PlaceholderChefHomeScreen';
+import ChefDashboardScreen from '../screens/chef/ChefDashboardScreen';
 import ChefBookingsScreen from '../screens/chef/ChefBookingsScreen';
 import ChefBookingDetailScreen from '../screens/chef/ChefBookingDetailScreen';
 import WriteReviewScreen from '../screens/shared/WriteReviewScreen';
@@ -58,7 +58,7 @@ export default function ChefTabNavigator() {
     >
       <Tab.Screen
         name="ChefDashboardTab"
-        component={PlaceholderChefHomeScreen}
+        component={ChefDashboardScreen}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: () => undefined,
