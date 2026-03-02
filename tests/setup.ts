@@ -8,6 +8,21 @@ jest.mock('expo-secure-store', () => ({
   deleteItemAsync: jest.fn().mockResolvedValue(undefined),
 }));
 
+// Mock expo-image-picker for photo upload tests
+jest.mock('expo-image-picker', () => ({
+  launchImageLibraryAsync: jest.fn().mockResolvedValue({
+    canceled: false,
+    assets: [{ uri: 'file:///mock/photo.jpg' }],
+  }),
+  requestMediaLibraryPermissionsAsync: jest.fn().mockResolvedValue({
+    status: 'granted',
+    granted: true,
+  }),
+  MediaTypeOptions: {
+    Images: 'Images',
+  },
+}));
+
 // Silence console warnings in tests unless debugging
 const originalWarn = console.warn;
 console.warn = (...args: unknown[]) => {

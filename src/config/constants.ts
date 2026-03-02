@@ -47,6 +47,33 @@ export enum SwipeDirection {
   PASS = 'pass',
 }
 
+export const CUISINE_OPTIONS = [
+  'American',
+  'Italian',
+  'French',
+  'Mexican',
+  'Chinese',
+  'Japanese',
+  'Korean',
+  'Thai',
+  'Indian',
+  'Mediterranean',
+  'Middle Eastern',
+  'Caribbean',
+  'Southern / Soul Food',
+  'Cajun / Creole',
+  'Latin American',
+  'Vietnamese',
+  'Greek',
+  'Spanish',
+  'Ethiopian',
+  'Vegan',
+  'Farm-to-Table',
+  'BBQ / Grilling',
+  'Seafood',
+  'Pastry / Desserts',
+] as const;
+
 export const HOME_CHEF_PROGRESSION = {
   LEVEL_1: { maxGuests: 4, requiredEvents: 0, minRating: 0 },
   LEVEL_2: { maxGuests: 8, requiredEvents: 3, minRating: 4.0 },

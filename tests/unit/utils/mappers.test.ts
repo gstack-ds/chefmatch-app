@@ -1,5 +1,10 @@
-import { mapUserRow } from '../../../src/utils/mappers';
+import { mapUserRow, mapChefProfileRow, mapMenuItemRow, mapChefAvailabilityRow } from '../../../src/utils/mappers';
 import { mockUserRow, mockChefUserRow } from '../../fixtures/auth-fixtures';
+import {
+  mockChefProfileRow,
+  mockMenuItemRow,
+  mockAvailabilityRow,
+} from '../../fixtures/chef-fixtures';
 
 describe('mapUserRow', () => {
   it('maps a consumer user row to UserProfile', () => {
@@ -43,5 +48,111 @@ describe('mapUserRow', () => {
     expect(result).not.toHaveProperty('avatar_url');
     expect(result).not.toHaveProperty('created_at');
     expect(result).not.toHaveProperty('updated_at');
+  });
+});
+
+describe('mapChefProfileRow', () => {
+  it('maps a chef profile row to ChefProfile', () => {
+    const result = mapChefProfileRow(mockChefProfileRow);
+
+    expect(result).toEqual({
+      id: 'chef-profile-1',
+      userId: 'chef-456',
+      tier: 'classically_trained',
+      bio: 'Classically trained chef with 10 years of experience.',
+      cuisineSpecialties: ['Italian', 'French'],
+      photos: ['https://example.com/photo1.jpg'],
+      serviceModels: ['full_service'],
+      priceRangeMin: 50,
+      priceRangeMax: 150,
+      serviceRadius: 25,
+      latitude: 34.0522,
+      longitude: -118.2437,
+      allergensCantAccommodate: ['Tree Nuts'],
+      backgroundCheckStatus: 'not_started',
+      trainingCompleted: false,
+      isLive: false,
+      averageRating: null,
+      totalReviews: 0,
+      completedEvents: 0,
+      homeChefLevel: null,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapChefProfileRow(mockChefProfileRow);
+
+    expect(result).toHaveProperty('userId');
+    expect(result).toHaveProperty('cuisineSpecialties');
+    expect(result).toHaveProperty('serviceModels');
+    expect(result).toHaveProperty('priceRangeMin');
+    expect(result).toHaveProperty('priceRangeMax');
+    expect(result).toHaveProperty('serviceRadius');
+    expect(result).toHaveProperty('backgroundCheckStatus');
+    expect(result).toHaveProperty('isLive');
+    expect(result).not.toHaveProperty('user_id');
+    expect(result).not.toHaveProperty('cuisine_specialties');
+    expect(result).not.toHaveProperty('service_models');
+    expect(result).not.toHaveProperty('price_range_min');
+    expect(result).not.toHaveProperty('is_live');
+  });
+});
+
+describe('mapMenuItemRow', () => {
+  it('maps a menu item row to MenuItem', () => {
+    const result = mapMenuItemRow(mockMenuItemRow);
+
+    expect(result).toEqual({
+      id: 'menu-item-1',
+      chefId: 'chef-profile-1',
+      name: 'Truffle Risotto',
+      description: 'Creamy arborio rice with black truffle and parmesan.',
+      price: 45,
+      allergens: ['Milk', 'Wheat'],
+      isAvailable: true,
+      sortOrder: 0,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapMenuItemRow(mockMenuItemRow);
+
+    expect(result).toHaveProperty('chefId');
+    expect(result).toHaveProperty('isAvailable');
+    expect(result).toHaveProperty('sortOrder');
+    expect(result).not.toHaveProperty('chef_id');
+    expect(result).not.toHaveProperty('is_available');
+    expect(result).not.toHaveProperty('sort_order');
+  });
+});
+
+describe('mapChefAvailabilityRow', () => {
+  it('maps an availability row to ChefAvailability', () => {
+    const result = mapChefAvailabilityRow(mockAvailabilityRow);
+
+    expect(result).toEqual({
+      id: 'avail-1',
+      chefId: 'chef-profile-1',
+      dayOfWeek: 6,
+      startTime: '10:00',
+      endTime: '20:00',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapChefAvailabilityRow(mockAvailabilityRow);
+
+    expect(result).toHaveProperty('chefId');
+    expect(result).toHaveProperty('dayOfWeek');
+    expect(result).toHaveProperty('startTime');
+    expect(result).toHaveProperty('endTime');
+    expect(result).not.toHaveProperty('chef_id');
+    expect(result).not.toHaveProperty('day_of_week');
+    expect(result).not.toHaveProperty('start_time');
+    expect(result).not.toHaveProperty('end_time');
   });
 });
