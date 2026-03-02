@@ -1,16 +1,18 @@
 import { supabase } from '../config/supabase';
-import { ChefProfile, DiscoverableChef, DiscoveryFilters } from '../models/types';
+import { Database } from '../models/database';
+import { DiscoverableChef, DiscoveryFilters } from '../models/types';
 import { mapChefProfileRow } from '../utils/mappers';
+
+type ChefProfileRow = Database['public']['Tables']['chef_profiles']['Row'];
 
 const PAGE_SIZE = 20;
 
-interface ChefProfileRowWithUser {
+type ChefProfileRowWithUser = ChefProfileRow & {
   users: { display_name: string; avatar_url: string | null };
-  [key: string]: unknown;
-}
+};
 
 function mapDiscoverableChefRow(row: ChefProfileRowWithUser): DiscoverableChef {
-  const base = mapChefProfileRow(row as Parameters<typeof mapChefProfileRow>[0]);
+  const base = mapChefProfileRow(row);
   return {
     ...base,
     displayName: row.users.display_name,
