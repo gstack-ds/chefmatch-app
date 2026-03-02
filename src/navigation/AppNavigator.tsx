@@ -2,11 +2,11 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/use-auth';
 import { ChefOnboardingProvider } from '../hooks/use-chef-onboarding';
-import PlaceholderHomeScreen from '../screens/shared/PlaceholderHomeScreen';
 import ChefOnboardingNavigator from './ChefOnboardingNavigator';
+import ConsumerTabNavigator from './ConsumerTabNavigator';
 
 export type AppStackParamList = {
-  Home: undefined;
+  ConsumerTabs: undefined;
   ChefOnboarding: undefined;
 };
 
@@ -29,7 +29,7 @@ export default function AppNavigator() {
       {isChef ? (
         <Stack.Screen name="ChefOnboarding" component={ChefOnboardingWithProvider} />
       ) : (
-        <Stack.Screen name="Home" component={PlaceholderHomeScreen} />
+        <Stack.Screen name="ConsumerTabs" component={ConsumerTabNavigator} />
       )}
     </Stack.Navigator>
   );
