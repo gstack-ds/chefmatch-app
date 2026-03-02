@@ -130,8 +130,8 @@ export function ChefOnboardingProvider({ children }: { children: React.ReactNode
     [chefProfile, menuItems, availability],
   );
 
+  // Photos optional for MVP — add back before production launch
   const canGoLive = stepCompletion.profile
-    && stepCompletion.photos
     && stepCompletion.menu
     && stepCompletion.availability;
 
