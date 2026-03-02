@@ -2,9 +2,16 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PlaceholderChefHomeScreen from '../screens/chef/PlaceholderChefHomeScreen';
-import ChefBookingsScreen, { ChefBookingsStackParamList } from '../screens/chef/ChefBookingsScreen';
+import ChefBookingsScreen from '../screens/chef/ChefBookingsScreen';
 import ChefBookingDetailScreen from '../screens/chef/ChefBookingDetailScreen';
+import WriteReviewScreen from '../screens/shared/WriteReviewScreen';
 import MessagingStackNavigator from './MessagingStackNavigator';
+
+export type ChefBookingsStackParamList = {
+  ChefBookings: undefined;
+  ChefBookingDetail: { bookingId: string };
+  WriteReview: { bookingId: string; reviewerId: string; revieweeId: string; revieweeName: string };
+};
 
 export type ChefTabParamList = {
   ChefDashboardTab: undefined;
@@ -27,6 +34,11 @@ function ChefBookingsStackNavigator() {
         name="ChefBookingDetail"
         component={ChefBookingDetailScreen}
         options={{ title: 'Booking Details', headerBackTitle: 'Back' }}
+      />
+      <BookingsStack.Screen
+        name="WriteReview"
+        component={WriteReviewScreen}
+        options={{ title: 'Write Review', headerBackTitle: 'Back' }}
       />
     </BookingsStack.Navigator>
   );

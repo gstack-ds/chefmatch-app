@@ -8,9 +8,11 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BookingStatus } from '../../config/constants';
 import { Booking } from '../../models/types';
+import { useAuth } from '../../hooks/use-auth';
 import { getBooking, updateBookingStatus } from '../../services/booking-service';
 
 type ChefBookingDetailParams = {
@@ -26,8 +28,14 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   cancelled: { bg: '#fee2e2', text: '#991b1b' },
 };
 
+type WriteReviewNav = NativeStackNavigationProp<{
+  WriteReview: { bookingId: string; reviewerId: string; revieweeId: string; revieweeName: string };
+}>;
+
 export default function ChefBookingDetailScreen() {
   const route = useRoute<ChefBookingDetailRouteProp>();
+  const navigation = useNavigation<WriteReviewNav>();
+  const { user } = useAuth();
   const { bookingId } = route.params;
   const [booking, setBooking] = useState<Booking | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,6 +104,22 @@ export default function ChefBookingDetailScreen() {
       )}
       {booking.specialRequests.length > 0 && (
         <InfoRow label="Special Requests" value={booking.specialRequests} />
+      )}
+
+      {booking.status === BookingStatus.COMPLETED && user && (
+        <TouchableOpacity
+          style={styles.reviewButton}
+          onPress={() =>
+            navigation.navigate('WriteReview', {
+              bookingId: booking.id,
+              reviewerId: user.id,
+              revieweeId: booking.consumerId,
+              revieweeName: 'Guest',
+            })
+          }
+        >
+          <Text style={styles.reviewButtonText}>Leave a Review</Text>
+        </TouchableOpacity>
       )}
 
       {booking.status === BookingStatus.PENDING && (
@@ -205,5 +229,17 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.5,
+  },
+  reviewButton: {
+    backgroundColor: '#f97316',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 28,
+  },
+  reviewButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

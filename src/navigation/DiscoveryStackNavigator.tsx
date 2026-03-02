@@ -5,12 +5,16 @@ import DiscoveryFeedScreen from '../screens/consumer/DiscoveryFeedScreen';
 import ChefDetailScreen from '../screens/consumer/ChefDetailScreen';
 import BookingRequestScreen from '../screens/consumer/BookingRequestScreen';
 import BookingDetailScreen from '../screens/consumer/BookingDetailScreen';
+import WriteReviewScreen from '../screens/shared/WriteReviewScreen';
+import ReviewListScreen from '../screens/shared/ReviewListScreen';
 
 export type DiscoveryStackParamList = {
   DiscoveryFeed: undefined;
   ChefDetail: { chef: DiscoverableChef };
   BookingRequest: { chefId: string; chefName: string; conversationId: string | null };
   BookingDetail: { bookingId: string };
+  WriteReview: { bookingId: string; reviewerId: string; revieweeId: string; revieweeName: string };
+  ReviewList: { userId: string; userName: string };
 };
 
 const Stack = createNativeStackNavigator<DiscoveryStackParamList>();
@@ -44,6 +48,22 @@ export default function DiscoveryStackNavigator() {
         component={BookingDetailScreen}
         options={{
           title: 'Booking Details',
+          headerBackTitle: 'Back',
+        }}
+      />
+      <Stack.Screen
+        name="WriteReview"
+        component={WriteReviewScreen}
+        options={{
+          title: 'Write Review',
+          headerBackTitle: 'Back',
+        }}
+      />
+      <Stack.Screen
+        name="ReviewList"
+        component={ReviewListScreen}
+        options={{
+          title: 'Reviews',
           headerBackTitle: 'Back',
         }}
       />

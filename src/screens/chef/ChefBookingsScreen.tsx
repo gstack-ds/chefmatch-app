@@ -10,15 +10,11 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ChefBookingsStackParamList } from '../../navigation/ChefTabNavigator';
 import { BookingStatus } from '../../config/constants';
 import { Booking } from '../../models/types';
 import { useChefOnboarding } from '../../hooks/use-chef-onboarding';
 import { getBookingsForChef } from '../../services/booking-service';
-
-export type ChefBookingsStackParamList = {
-  ChefBookings: undefined;
-  ChefBookingDetail: { bookingId: string };
-};
 
 const STATUS_ORDER: Record<string, number> = {
   [BookingStatus.PENDING]: 0,
