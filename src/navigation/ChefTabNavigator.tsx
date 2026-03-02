@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PlaceholderChefHomeScreen from '../screens/chef/PlaceholderChefHomeScreen';
 import ChefBookingsScreen, { ChefBookingsStackParamList } from '../screens/chef/ChefBookingsScreen';
 import ChefBookingDetailScreen from '../screens/chef/ChefBookingDetailScreen';
-import PlaceholderMessagesScreen from '../screens/consumer/PlaceholderMessagesScreen';
+import MessagingStackNavigator from './MessagingStackNavigator';
 
 export type ChefTabParamList = {
   ChefDashboardTab: undefined;
@@ -62,7 +62,7 @@ export default function ChefTabNavigator() {
       />
       <Tab.Screen
         name="ChefMessagesTab"
-        component={PlaceholderMessagesScreen}
+        component={MessagingStackNavigator}
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: () => undefined,

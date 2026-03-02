@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DiscoveryProvider } from '../hooks/use-discovery';
 import DiscoveryStackNavigator from './DiscoveryStackNavigator';
-import PlaceholderMessagesScreen from '../screens/consumer/PlaceholderMessagesScreen';
+import MessagingStackNavigator from './MessagingStackNavigator';
 import PlaceholderProfileScreen from '../screens/consumer/PlaceholderProfileScreen';
 
 export type ConsumerTabParamList = {
@@ -43,7 +43,7 @@ export default function ConsumerTabNavigator() {
       />
       <Tab.Screen
         name="MessagesTab"
-        component={PlaceholderMessagesScreen}
+        component={MessagingStackNavigator}
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({ color, size }) => undefined,
