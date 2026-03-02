@@ -131,4 +131,4 @@ chefmatch/
 - [ ] Design database schema (users, chefs, consumers, bookings, reviews, messages)
 - [x] Implement authentication flow (signup/login with Supabase Auth)
 - [x] Build chef onboarding screens (profile creation, photo upload, menu setup)
-- [ ] Build swipe-based discovery UI
+- [x] Build swipe-based discovery UI
