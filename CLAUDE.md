@@ -120,11 +120,17 @@ chefmatch/
 | 2026-03-01 | TypeScript over JavaScript | Type safety critical for marketplace with multiple user roles and complex state | JavaScript (faster initially but harder to maintain) |
 | 2026-03-01 | No payment processing in v1.0 | Reduces complexity, legal burden, and time-to-market. Venmo/Zelle works for early adopters | Stripe integration (adds weeks of work and compliance requirements) |
 | 2026-03-01 | Two chef tiers (Classically Trained / Home Chef) | Opens supply side dramatically, makes platform accessible at lower price points | Single tier (limits supply), three+ tiers (overcomplicates onboarding) |
+| 2026-03-02 | Like = instant match (no two-sided matching) | Simplifies MVP — consumer swipe-right creates a conversation immediately | Two-sided matching (adds complexity, delays engagement) |
+| 2026-03-02 | Skip location filtering for MVP | Launching in one metro area, all live chefs shown | Geo-filtering (adds complexity, not needed for single-city launch) |
+| 2026-03-02 | Photos optional for going live in MVP | Reduces friction for chef onboarding during early testing | Required photos (add back before production) |
 
 ## Gotchas Log
 | Date | Issue | Resolution |
 |------|-------|------------|
-| | | |
+| 2026-03-02 | Supabase crash: "Cannot assign to property 'protocol' which has only a getter" | Hermes URL implementation is read-only. Import `react-native-url-polyfill/auto` as first line in App.tsx (entry point), not in supabase.ts — module evaluation order means supabase.ts import may run before the polyfill if placed there. |
+| 2026-03-02 | Worklets version mismatch (JS 0.7.4 vs native 0.5.1) | Use `npx expo install` to resolve SDK-compatible versions of reanimated, gesture-handler, and worklets. Don't manually pin versions — let Expo resolve them. Add react-native-worklets as explicit dep. |
+| 2026-03-02 | "main has not been registered" crash on launch | With `"main": "./src/App.tsx"` in package.json, we bypass Expo's AppEntry.js wrapper. Must call `registerRootComponent(App)` explicitly in App.tsx. |
+| 2026-03-02 | expo-router causing transform.routerRoot in bundle URL | Uninstall expo-router if not using file-based routing. The param is injected by @expo/metro-config unconditionally but is inert without expo-router installed. |
 
 ## Current TODOs
 - [ ] Set up Supabase project and configure environment variables
@@ -132,3 +138,10 @@ chefmatch/
 - [x] Implement authentication flow (signup/login with Supabase Auth)
 - [x] Build chef onboarding screens (profile creation, photo upload, menu setup)
 - [x] Build swipe-based discovery UI
+- [x] Upgrade Expo SDK 52 → 54 (React Native 0.81.5, React 19.1.0)
+- [x] Fix Expo Go launch issues (URL polyfill, worklets, registerRootComponent)
+- [x] Route live chefs to home screen after onboarding
+- [ ] Build messaging UI (conversations list + chat screen)
+- [ ] Build consumer profile screen (edit allergies, preferences)
+- [ ] Build booking flow (request → confirm → complete)
+- [ ] Re-add photo requirement for going live before production launch
