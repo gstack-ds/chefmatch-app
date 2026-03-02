@@ -1,11 +1,14 @@
 import { Database } from '../models/database';
-import { ChefTier, ServiceModel, BackgroundCheckStatus } from '../config/constants';
-import { UserProfile, ChefProfile, MenuItem, ChefAvailability } from '../models/types';
+import { ChefTier, ServiceModel, BackgroundCheckStatus, SwipeDirection } from '../config/constants';
+import { UserProfile, ChefProfile, MenuItem, ChefAvailability, ConsumerProfile, Swipe, Conversation } from '../models/types';
 
 type UserRow = Database['public']['Tables']['users']['Row'];
 type ChefProfileRow = Database['public']['Tables']['chef_profiles']['Row'];
 type MenuItemRow = Database['public']['Tables']['menu_items']['Row'];
 type ChefAvailabilityRow = Database['public']['Tables']['chef_availability']['Row'];
+type ConsumerProfileRow = Database['public']['Tables']['consumer_profiles']['Row'];
+type SwipeRow = Database['public']['Tables']['swipes']['Row'];
+type ConversationRow = Database['public']['Tables']['conversations']['Row'];
 
 export function mapUserRow(row: UserRow): UserProfile {
   return {
@@ -69,5 +72,39 @@ export function mapChefAvailabilityRow(row: ChefAvailabilityRow): ChefAvailabili
     dayOfWeek: row.day_of_week,
     startTime: row.start_time,
     endTime: row.end_time,
+  };
+}
+
+export function mapConsumerProfileRow(row: ConsumerProfileRow): ConsumerProfile {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    allergies: row.allergies,
+    dietaryRestrictions: row.dietary_restrictions,
+    preferredCuisines: row.preferred_cuisines,
+    maxBudget: row.max_budget,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+export function mapSwipeRow(row: SwipeRow): Swipe {
+  return {
+    id: row.id,
+    consumerId: row.consumer_id,
+    chefId: row.chef_id,
+    direction: row.direction as SwipeDirection,
+    createdAt: row.created_at,
+  };
+}
+
+export function mapConversationRow(row: ConversationRow): Conversation {
+  return {
+    id: row.id,
+    consumerId: row.consumer_id,
+    chefId: row.chef_id,
+    createdAt: row.created_at,
   };
 }

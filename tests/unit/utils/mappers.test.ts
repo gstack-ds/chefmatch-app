@@ -1,10 +1,23 @@
-import { mapUserRow, mapChefProfileRow, mapMenuItemRow, mapChefAvailabilityRow } from '../../../src/utils/mappers';
+import {
+  mapUserRow,
+  mapChefProfileRow,
+  mapMenuItemRow,
+  mapChefAvailabilityRow,
+  mapConsumerProfileRow,
+  mapSwipeRow,
+  mapConversationRow,
+} from '../../../src/utils/mappers';
 import { mockUserRow, mockChefUserRow } from '../../fixtures/auth-fixtures';
 import {
   mockChefProfileRow,
   mockMenuItemRow,
   mockAvailabilityRow,
 } from '../../fixtures/chef-fixtures';
+import {
+  mockConsumerProfileRow,
+  mockSwipeRowLike,
+  mockConversationRow,
+} from '../../fixtures/consumer-fixtures';
 
 describe('mapUserRow', () => {
   it('maps a consumer user row to UserProfile', () => {
@@ -154,5 +167,86 @@ describe('mapChefAvailabilityRow', () => {
     expect(result).not.toHaveProperty('day_of_week');
     expect(result).not.toHaveProperty('start_time');
     expect(result).not.toHaveProperty('end_time');
+  });
+});
+
+describe('mapConsumerProfileRow', () => {
+  it('maps a consumer profile row to ConsumerProfile', () => {
+    const result = mapConsumerProfileRow(mockConsumerProfileRow);
+
+    expect(result).toEqual({
+      id: 'consumer-profile-1',
+      userId: 'user-123',
+      allergies: ['Peanuts', 'Tree Nuts'],
+      dietaryRestrictions: ['vegetarian'],
+      preferredCuisines: ['Italian', 'Japanese'],
+      maxBudget: 100,
+      latitude: 34.0522,
+      longitude: -118.2437,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapConsumerProfileRow(mockConsumerProfileRow);
+
+    expect(result).toHaveProperty('userId');
+    expect(result).toHaveProperty('dietaryRestrictions');
+    expect(result).toHaveProperty('preferredCuisines');
+    expect(result).toHaveProperty('maxBudget');
+    expect(result).not.toHaveProperty('user_id');
+    expect(result).not.toHaveProperty('dietary_restrictions');
+    expect(result).not.toHaveProperty('preferred_cuisines');
+    expect(result).not.toHaveProperty('max_budget');
+  });
+});
+
+describe('mapSwipeRow', () => {
+  it('maps a swipe row to Swipe', () => {
+    const result = mapSwipeRow(mockSwipeRowLike);
+
+    expect(result).toEqual({
+      id: 'swipe-1',
+      consumerId: 'consumer-profile-1',
+      chefId: 'chef-profile-1',
+      direction: 'like',
+      createdAt: '2026-01-02T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapSwipeRow(mockSwipeRowLike);
+
+    expect(result).toHaveProperty('consumerId');
+    expect(result).toHaveProperty('chefId');
+    expect(result).toHaveProperty('createdAt');
+    expect(result).not.toHaveProperty('consumer_id');
+    expect(result).not.toHaveProperty('chef_id');
+    expect(result).not.toHaveProperty('created_at');
+  });
+});
+
+describe('mapConversationRow', () => {
+  it('maps a conversation row to Conversation', () => {
+    const result = mapConversationRow(mockConversationRow);
+
+    expect(result).toEqual({
+      id: 'conversation-1',
+      consumerId: 'consumer-profile-1',
+      chefId: 'chef-profile-1',
+      createdAt: '2026-01-02T00:00:00.000Z',
+    });
+  });
+
+  it('converts snake_case keys to camelCase', () => {
+    const result = mapConversationRow(mockConversationRow);
+
+    expect(result).toHaveProperty('consumerId');
+    expect(result).toHaveProperty('chefId');
+    expect(result).toHaveProperty('createdAt');
+    expect(result).not.toHaveProperty('consumer_id');
+    expect(result).not.toHaveProperty('chef_id');
+    expect(result).not.toHaveProperty('created_at');
   });
 });
