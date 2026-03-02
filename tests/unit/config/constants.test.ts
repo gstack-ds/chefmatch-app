@@ -3,6 +3,9 @@ import {
   ChefTier,
   BookingStatus,
   ServiceModel,
+  GroceryArrangement,
+  BackgroundCheckStatus,
+  SwipeDirection,
   FDA_TOP_9_ALLERGENS,
   HOME_CHEF_PROGRESSION,
 } from '../../../src/config/constants';
@@ -47,5 +50,26 @@ describe('App Constants', () => {
     expect(HOME_CHEF_PROGRESSION.LEVEL_3.requiredEvents).toBeGreaterThan(
       HOME_CHEF_PROGRESSION.LEVEL_2.requiredEvents
     );
+  });
+
+  it('should define three grocery arrangements', () => {
+    expect(Object.values(GroceryArrangement)).toHaveLength(3);
+    expect(GroceryArrangement.CHEF_PROVIDES).toBe('chef_provides');
+    expect(GroceryArrangement.CONSUMER_PROVIDES).toBe('consumer_provides');
+    expect(GroceryArrangement.SPLIT).toBe('split');
+  });
+
+  it('should define four background check statuses', () => {
+    expect(Object.values(BackgroundCheckStatus)).toHaveLength(4);
+    expect(BackgroundCheckStatus.NOT_STARTED).toBe('not_started');
+    expect(BackgroundCheckStatus.PENDING).toBe('pending');
+    expect(BackgroundCheckStatus.PASSED).toBe('passed');
+    expect(BackgroundCheckStatus.FAILED).toBe('failed');
+  });
+
+  it('should define two swipe directions', () => {
+    expect(Object.values(SwipeDirection)).toHaveLength(2);
+    expect(SwipeDirection.LIKE).toBe('like');
+    expect(SwipeDirection.PASS).toBe('pass');
   });
 });

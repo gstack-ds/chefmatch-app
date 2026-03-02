@@ -29,6 +29,24 @@ export const FDA_TOP_9_ALLERGENS = [
   'Sesame',
 ] as const;
 
+export enum GroceryArrangement {
+  CHEF_PROVIDES = 'chef_provides',
+  CONSUMER_PROVIDES = 'consumer_provides',
+  SPLIT = 'split',
+}
+
+export enum BackgroundCheckStatus {
+  NOT_STARTED = 'not_started',
+  PENDING = 'pending',
+  PASSED = 'passed',
+  FAILED = 'failed',
+}
+
+export enum SwipeDirection {
+  LIKE = 'like',
+  PASS = 'pass',
+}
+
 export const HOME_CHEF_PROGRESSION = {
   LEVEL_1: { maxGuests: 4, requiredEvents: 0, minRating: 0 },
   LEVEL_2: { maxGuests: 8, requiredEvents: 3, minRating: 4.0 },
