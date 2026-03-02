@@ -25,7 +25,6 @@
       "package": "com.chefmatch.app"
     },
     "plugins": [
-      "expo-router",
       "expo-font",
       "expo-secure-store"
     ]

@@ -1,8 +1,11 @@
 import { Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { supabase } from '../config/supabase';
 import { ChefTier } from '../config/constants';
+import { Database } from '../models/database';
 import { UserProfile } from '../models/types';
 import { mapUserRow } from '../utils/mappers';
+
+type UserRow = Database['public']['Tables']['users']['Row'];
 
 export interface SignUpParams {
   email: string;
@@ -100,9 +103,9 @@ export async function getUserProfile(userId: string): Promise<UserProfile> {
     .from('users')
     .select('*')
     .eq('id', userId)
-    .single();
+    .single<UserRow>();
 
-  if (error) throw new Error(error.message);
+  if (error || !data) throw new Error(error?.message ?? 'User not found');
   return mapUserRow(data);
 }
 

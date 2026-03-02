@@ -32,6 +32,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       chef_profiles: {
         Row: {
@@ -106,6 +107,14 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'chef_profiles_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       chef_availability: {
         Row: {
@@ -129,6 +138,14 @@ export interface Database {
           start_time?: string;
           end_time?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'chef_availability_chef_id_fkey';
+            columns: ['chef_id'];
+            referencedRelation: 'chef_profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       menu_items: {
         Row: {
@@ -167,6 +184,14 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'menu_items_chef_id_fkey';
+            columns: ['chef_id'];
+            referencedRelation: 'chef_profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       consumer_profiles: {
         Row: {
@@ -205,6 +230,14 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'consumer_profiles_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       swipes: {
         Row: {
@@ -228,6 +261,20 @@ export interface Database {
           direction?: 'like' | 'pass';
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'swipes_consumer_id_fkey';
+            columns: ['consumer_id'];
+            referencedRelation: 'consumer_profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'swipes_chef_id_fkey';
+            columns: ['chef_id'];
+            referencedRelation: 'chef_profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       conversations: {
         Row: {
@@ -248,6 +295,20 @@ export interface Database {
           chef_id?: string;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'conversations_consumer_id_fkey';
+            columns: ['consumer_id'];
+            referencedRelation: 'consumer_profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'conversations_chef_id_fkey';
+            columns: ['chef_id'];
+            referencedRelation: 'chef_profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       messages: {
         Row: {
@@ -274,6 +335,20 @@ export interface Database {
           read_at?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'messages_conversation_id_fkey';
+            columns: ['conversation_id'];
+            referencedRelation: 'conversations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'messages_sender_id_fkey';
+            columns: ['sender_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       bookings: {
         Row: {
@@ -333,6 +408,26 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'bookings_consumer_id_fkey';
+            columns: ['consumer_id'];
+            referencedRelation: 'consumer_profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'bookings_chef_id_fkey';
+            columns: ['chef_id'];
+            referencedRelation: 'chef_profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'bookings_conversation_id_fkey';
+            columns: ['conversation_id'];
+            referencedRelation: 'conversations';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       reviews: {
         Row: {
@@ -362,10 +457,31 @@ export interface Database {
           text?: string;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'reviews_booking_id_fkey';
+            columns: ['booking_id'];
+            referencedRelation: 'bookings';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reviews_reviewer_id_fkey';
+            columns: ['reviewer_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'reviews_reviewee_id_fkey';
+            columns: ['reviewee_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
     Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 }
