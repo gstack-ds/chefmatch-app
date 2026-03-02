@@ -2,6 +2,7 @@
 module.exports = {
   preset: 'jest-expo',
   testMatch: ['**/tests/**/*.test.ts', '**/tests/**/*.test.tsx'],
+  setupFiles: ['./tests/setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
