@@ -123,6 +123,9 @@ chefmatch/
 | 2026-03-02 | Like = instant match (no two-sided matching) | Simplifies MVP — consumer swipe-right creates a conversation immediately | Two-sided matching (adds complexity, delays engagement) |
 | 2026-03-02 | Skip location filtering for MVP | Launching in one metro area, all live chefs shown | Geo-filtering (adds complexity, not needed for single-city launch) |
 | 2026-03-02 | Photos optional for going live in MVP | Reduces friction for chef onboarding during early testing | Required photos (add back before production) |
+| 2026-03-02 | Shared screens in src/screens/shared/ | ChatScreen, ConversationListScreen, WriteReviewScreen, ReviewListScreen used by both chef and consumer sides | Duplicate per-role (more code), single screen with role check (same thing) |
+| 2026-03-02 | TextInput for event date in MVP | No date picker dependency needed. Add @react-native-community/datetimepicker before production | DateTimePicker (adds native dep, more setup) |
+| 2026-03-02 | N+1 queries for conversation last message | Fetch latest message per conversation in a loop. Acceptable for MVP with small user base. Optimize with DB view before scaling | Supabase view/RPC (adds migration complexity for MVP) |
 
 ## Gotchas Log
 | Date | Issue | Resolution |
@@ -141,7 +144,15 @@ chefmatch/
 - [x] Upgrade Expo SDK 52 → 54 (React Native 0.81.5, React 19.1.0)
 - [x] Fix Expo Go launch issues (URL polyfill, worklets, registerRootComponent)
 - [x] Route live chefs to home screen after onboarding
-- [ ] Build messaging UI (conversations list + chat screen)
-- [ ] Build consumer profile screen (edit allergies, preferences)
-- [ ] Build booking flow (request → confirm → complete)
+- [x] Build messaging UI (conversations list + chat screen with Supabase Realtime)
+- [x] Build consumer profile screen (edit allergies, preferences, booking history)
+- [x] Build booking flow (request → confirm → complete, both sides)
+- [x] Build review and rating system (write review, view reviews)
+- [x] Build chef dashboard (stats, pending bookings, upcoming events, reviews)
+- [x] Create storage bucket setup script (scripts/setup-storage.ts)
 - [ ] Re-add photo requirement for going live before production launch
+- [ ] Add proper date picker for booking request (replace TextInput)
+- [ ] Optimize conversation list query (replace N+1 with DB view)
+- [ ] Add Supabase RLS policies for all tables
+- [ ] Add tab bar icons (currently all return undefined)
+- [ ] Create DB triggers for average_rating/total_reviews/completed_events aggregation
