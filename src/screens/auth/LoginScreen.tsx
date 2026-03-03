@@ -55,6 +55,7 @@ export default function LoginScreen({ navigation }: Props) {
 
         {error && <Text style={styles.error}>{error}</Text>}
 
+        <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -66,6 +67,7 @@ export default function LoginScreen({ navigation }: Props) {
           editable={!isSubmitting}
         />
 
+        <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -131,6 +133,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
     paddingHorizontal: 8,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 6,
   },
   input: {
     height: 50,

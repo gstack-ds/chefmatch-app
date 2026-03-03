@@ -28,12 +28,20 @@ export default function SignUpScreen({ navigation }: Props) {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [localError, setLocalError] = useState('');
   const [role, setRole] = useState<Role>('consumer');
   const [chefTier, setChefTier] = useState<ChefTier>(ChefTier.HOME_CHEF);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSignUp = async () => {
     if (!displayName.trim() || !email.trim() || !password) return;
+
+    if (password !== confirmPassword) {
+      setLocalError('Passwords do not match');
+      return;
+    }
+    setLocalError('');
 
     setIsSubmitting(true);
     try {
@@ -68,8 +76,11 @@ export default function SignUpScreen({ navigation }: Props) {
         <Text style={styles.title}>Create Account</Text>
         <Text style={styles.subtitle}>Join the ChefMatch community</Text>
 
-        {error && <Text style={styles.error}>{error}</Text>}
+        {(error || localError) && (
+          <Text style={styles.error}>{localError || error}</Text>
+        )}
 
+        <Text style={styles.label}>Display Name</Text>
         <TextInput
           style={styles.input}
           placeholder="Display Name"
@@ -80,6 +91,7 @@ export default function SignUpScreen({ navigation }: Props) {
           editable={!isSubmitting}
         />
 
+        <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -91,11 +103,23 @@ export default function SignUpScreen({ navigation }: Props) {
           editable={!isSubmitting}
         />
 
+        <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.input}
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
+          secureTextEntry
+          textContentType="newPassword"
+          editable={!isSubmitting}
+        />
+
+        <Text style={styles.label}>Confirm Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
           secureTextEntry
           textContentType="newPassword"
           editable={!isSubmitting}
@@ -231,6 +255,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
     paddingHorizontal: 8,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 6,
   },
   input: {
     height: 50,
