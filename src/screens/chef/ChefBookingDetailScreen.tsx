@@ -14,6 +14,7 @@ import { BookingStatus } from '../../config/constants';
 import { Booking } from '../../models/types';
 import { useAuth } from '../../hooks/use-auth';
 import { getBooking, updateBookingStatus } from '../../services/booking-service';
+import { supabase } from '../../config/supabase';
 
 type ChefBookingDetailParams = {
   ChefBookingDetail: { bookingId: string };
@@ -40,10 +41,23 @@ export default function ChefBookingDetailScreen() {
   const [booking, setBooking] = useState<Booking | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [consumerName, setConsumerName] = useState('Guest');
 
   useEffect(() => {
     getBooking(bookingId)
-      .then(setBooking)
+      .then((b) => {
+        setBooking(b);
+        if (b) {
+          supabase
+            .from('users')
+            .select('display_name')
+            .eq('id', b.consumerId)
+            .single()
+            .then(({ data }) => {
+              if (data?.display_name) setConsumerName(data.display_name);
+            });
+        }
+      })
       .catch(() => {})
       .finally(() => setIsLoading(false));
   }, [bookingId]);
@@ -80,6 +94,9 @@ export default function ChefBookingDetailScreen() {
     return (
       <View style={styles.centered}>
         <Text style={styles.errorText}>Booking not found</Text>
+        <TouchableOpacity style={styles.goBackButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.goBackText}>Go Back</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -114,11 +131,21 @@ export default function ChefBookingDetailScreen() {
               bookingId: booking.id,
               reviewerId: user.id,
               revieweeId: booking.consumerId,
-              revieweeName: 'Guest',
+              revieweeName: consumerName,
             })
           }
         >
           <Text style={styles.reviewButtonText}>Leave a Review</Text>
+        </TouchableOpacity>
+      )}
+
+      {booking.status === BookingStatus.CONFIRMED && (
+        <TouchableOpacity
+          style={[styles.completeButton, isUpdating && styles.disabled]}
+          onPress={() => handleStatusUpdate(BookingStatus.COMPLETED, 'Complete')}
+          disabled={isUpdating}
+        >
+          <Text style={styles.completeText}>Mark as Completed</Text>
         </TouchableOpacity>
       )}
 
@@ -241,5 +268,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+  },
+  completeButton: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 28,
+  },
+  completeText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  goBackButton: {
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+  },
+  goBackText: {
+    color: '#2563eb',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

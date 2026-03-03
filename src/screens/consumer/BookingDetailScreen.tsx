@@ -14,6 +14,7 @@ import { BookingStatus } from '../../config/constants';
 import { Booking } from '../../models/types';
 import { useAuth } from '../../hooks/use-auth';
 import { getBooking, updateBookingStatus } from '../../services/booking-service';
+import { supabase } from '../../config/supabase';
 
 type BookingDetailParams = {
   BookingDetail: { bookingId: string };
@@ -40,10 +41,23 @@ export default function BookingDetailScreen() {
   const [booking, setBooking] = useState<Booking | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [chefName, setChefName] = useState('Chef');
 
   useEffect(() => {
     getBooking(bookingId)
-      .then(setBooking)
+      .then((b) => {
+        setBooking(b);
+        if (b) {
+          supabase
+            .from('users')
+            .select('display_name')
+            .eq('id', b.chefId)
+            .single()
+            .then(({ data }) => {
+              if (data?.display_name) setChefName(data.display_name);
+            });
+        }
+      })
       .catch(() => {})
       .finally(() => setIsLoading(false));
   }, [bookingId]);
@@ -83,6 +97,9 @@ export default function BookingDetailScreen() {
     return (
       <View style={styles.centered}>
         <Text style={styles.errorText}>Booking not found</Text>
+        <TouchableOpacity style={styles.goBackButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.goBackText}>Go Back</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -120,7 +137,7 @@ export default function BookingDetailScreen() {
               bookingId: booking.id,
               reviewerId: user.id,
               revieweeId: booking.chefId,
-              revieweeName: 'Chef',
+              revieweeName: chefName,
             })
           }
         >
@@ -225,5 +242,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+  },
+  goBackButton: {
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+  },
+  goBackText: {
+    color: '#f97316',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

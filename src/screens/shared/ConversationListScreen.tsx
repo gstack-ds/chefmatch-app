@@ -86,7 +86,14 @@ export default function ConversationListScreen() {
               </Text>
             </View>
             <View style={styles.rowContent}>
-              <Text style={styles.name}>{item.otherUserName}</Text>
+              <View style={styles.nameRow}>
+                <Text style={styles.name}>{item.otherUserName}</Text>
+                {item.lastMessageAt && (
+                  <Text style={styles.timestamp}>
+                    {new Date(item.lastMessageAt).toLocaleDateString()}
+                  </Text>
+                )}
+              </View>
               <Text style={styles.preview} numberOfLines={1}>
                 {item.lastMessage ?? 'No messages yet'}
               </Text>
@@ -149,11 +156,20 @@ const styles = StyleSheet.create({
   rowContent: {
     flex: 1,
   },
+  nameRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
   name: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1f2937',
-    marginBottom: 2,
+  },
+  timestamp: {
+    fontSize: 12,
+    color: '#9ca3af',
   },
   preview: {
     fontSize: 14,

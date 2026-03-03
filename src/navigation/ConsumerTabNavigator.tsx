@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DiscoveryProvider } from '../hooks/use-discovery';
 import DiscoveryStackNavigator from './DiscoveryStackNavigator';
@@ -38,7 +39,9 @@ export default function ConsumerTabNavigator() {
         component={DiscoveryTabWithProvider}
         options={{
           tabBarLabel: 'Discover',
-          tabBarIcon: ({ color, size }) => undefined,
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ fontSize: size, color }}>{'\u{1F50D}'}</Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -46,7 +49,9 @@ export default function ConsumerTabNavigator() {
         component={MessagingStackNavigator}
         options={{
           tabBarLabel: 'Messages',
-          tabBarIcon: ({ color, size }) => undefined,
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ fontSize: size, color }}>{'\u{1F4AC}'}</Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -54,7 +59,9 @@ export default function ConsumerTabNavigator() {
         component={ProfileStackNavigator}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => undefined,
+          tabBarIcon: ({ color, size }) => (
+            <Text style={{ fontSize: size, color }}>{'\u{1F464}'}</Text>
+          ),
         }}
       />
     </Tab.Navigator>

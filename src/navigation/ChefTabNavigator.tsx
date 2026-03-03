@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChefDashboardScreen from '../screens/chef/ChefDashboardScreen';
@@ -61,7 +62,9 @@ export default function ChefTabNavigator() {
         component={ChefDashboardScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: () => undefined,
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+            <Text style={{ fontSize: size, color }}>{'\u{1F3E0}'}</Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -69,7 +72,9 @@ export default function ChefTabNavigator() {
         component={ChefBookingsStackNavigator}
         options={{
           tabBarLabel: 'Bookings',
-          tabBarIcon: () => undefined,
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+            <Text style={{ fontSize: size, color }}>{'\u{1F4C5}'}</Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -77,7 +82,9 @@ export default function ChefTabNavigator() {
         component={MessagingStackNavigator}
         options={{
           tabBarLabel: 'Messages',
-          tabBarIcon: () => undefined,
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+            <Text style={{ fontSize: size, color }}>{'\u{1F4AC}'}</Text>
+          ),
         }}
       />
     </Tab.Navigator>

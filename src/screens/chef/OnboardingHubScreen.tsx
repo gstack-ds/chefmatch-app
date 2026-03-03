@@ -153,7 +153,7 @@ export default function OnboardingHubScreen({ navigation }: Props) {
 
       {!canGoLive && (
         <Text style={styles.goLiveHint}>
-          Complete all 4 steps to go live
+          Complete the required steps to go live
         </Text>
       )}
     </ScrollView>

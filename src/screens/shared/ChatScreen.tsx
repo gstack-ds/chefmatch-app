@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { Message } from '../../models/types';
@@ -75,6 +76,7 @@ export default function ChatScreen() {
       });
     } catch {
       setInputText(trimmed);
+      Alert.alert('Send Failed', 'Your message could not be sent. Please try again.');
     } finally {
       setIsSending(false);
     }
@@ -119,6 +121,9 @@ export default function ChatScreen() {
                 ]}
               >
                 {item.content}
+              </Text>
+              <Text style={[styles.messageTime, isMine ? styles.myTime : styles.theirTime]}>
+                {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </Text>
             </View>
           );
@@ -231,5 +236,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 15,
     fontWeight: '700',
+  },
+  messageTime: {
+    fontSize: 11,
+    marginTop: 4,
+  },
+  myTime: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'right',
+  },
+  theirTime: {
+    color: '#9ca3af',
   },
 });

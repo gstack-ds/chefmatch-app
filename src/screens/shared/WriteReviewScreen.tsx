@@ -73,6 +73,9 @@ export default function WriteReviewScreen() {
           </TouchableOpacity>
         ))}
       </View>
+      {rating === 0 && (
+        <Text style={styles.ratingHint}>Tap a star to rate</Text>
+      )}
 
       <Text style={styles.label}>Comments (optional)</Text>
       <TextInput
@@ -161,5 +164,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 17,
     fontWeight: '700',
+  },
+  ratingHint: {
+    fontSize: 13,
+    color: '#9ca3af',
+    marginBottom: 8,
   },
 });

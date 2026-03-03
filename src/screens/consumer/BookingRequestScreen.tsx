@@ -105,7 +105,7 @@ export default function BookingRequestScreen() {
         keyboardType="number-pad"
       />
 
-      <Text style={styles.label}>Occasion</Text>
+      <Text style={styles.label}>Occasion (optional)</Text>
       <TextInput
         style={styles.input}
         value={occasion}
@@ -115,6 +115,9 @@ export default function BookingRequestScreen() {
       />
 
       <Text style={styles.label}>Service Model</Text>
+      <Text style={styles.helperText}>
+        Full Service: Chef handles everything. Collaborative: Cook together with the chef.
+      </Text>
       <View style={styles.chipRow}>
         {SERVICE_MODEL_OPTIONS.map((opt) => (
           <TouchableOpacity
@@ -151,7 +154,7 @@ export default function BookingRequestScreen() {
         ))}
       </View>
 
-      <Text style={styles.label}>Location Address</Text>
+      <Text style={styles.label}>Location Address (optional)</Text>
       <TextInput
         style={styles.input}
         value={locationAddress}
@@ -160,7 +163,7 @@ export default function BookingRequestScreen() {
         placeholderTextColor="#9ca3af"
       />
 
-      <Text style={styles.label}>Special Requests</Text>
+      <Text style={styles.label}>Special Requests (optional)</Text>
       <TextInput
         style={[styles.input, styles.multiline]}
         value={specialRequests}
@@ -261,5 +264,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 17,
     fontWeight: '700',
+  },
+  helperText: {
+    fontSize: 13,
+    color: '#6b7280',
+    marginBottom: 8,
   },
 });

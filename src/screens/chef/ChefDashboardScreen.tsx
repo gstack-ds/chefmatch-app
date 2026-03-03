@@ -8,8 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { ChefTier, BookingStatus } from '../../config/constants';
 import { Booking, Review } from '../../models/types';
 import { useAuth } from '../../hooks/use-auth';
@@ -17,7 +16,12 @@ import { useChefOnboarding } from '../../hooks/use-chef-onboarding';
 import { getBookingsForChef } from '../../services/booking-service';
 import { getReviewsForUser } from '../../services/review-service';
 
+type RootParamList = {
+  ChefBookingsTab: { screen: string; params: { bookingId: string } };
+};
+
 export default function ChefDashboardScreen() {
+  const navigation = useNavigation<NavigationProp<RootParamList>>();
   const { user, signOut } = useAuth();
   const { chefProfile, menuItems, availability } = useChefOnboarding();
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -123,12 +127,19 @@ export default function ChefDashboardScreen() {
             Pending Requests ({pendingBookings.length})
           </Text>
           {pendingBookings.map((b) => (
-            <View key={b.id} style={styles.bookingRow}>
+            <TouchableOpacity
+              key={b.id}
+              style={styles.bookingRow}
+              onPress={() => navigation.navigate('ChefBookingsTab', {
+                screen: 'ChefBookingDetail',
+                params: { bookingId: b.id },
+              })}
+            >
               <Text style={styles.bookingDate}>{b.eventDate.split('T')[0]}</Text>
               <Text style={styles.bookingMeta}>
                 {b.partySize} guests · {b.occasion || 'No occasion'}
               </Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </>
       )}
@@ -139,12 +150,19 @@ export default function ChefDashboardScreen() {
             Upcoming Events ({confirmedBookings.length})
           </Text>
           {confirmedBookings.map((b) => (
-            <View key={b.id} style={styles.bookingRow}>
+            <TouchableOpacity
+              key={b.id}
+              style={styles.bookingRow}
+              onPress={() => navigation.navigate('ChefBookingsTab', {
+                screen: 'ChefBookingDetail',
+                params: { bookingId: b.id },
+              })}
+            >
               <Text style={styles.bookingDate}>{b.eventDate.split('T')[0]}</Text>
               <Text style={styles.bookingMeta}>
                 {b.partySize} guests · {b.occasion || 'No occasion'}
               </Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </>
       )}

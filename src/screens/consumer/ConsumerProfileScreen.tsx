@@ -192,9 +192,13 @@ export default function ConsumerProfileScreen() {
         )}
       </TouchableOpacity>
 
-      {bookings.length > 0 && (
+      <Text style={styles.sectionTitle}>Booking History</Text>
+      {bookings.length === 0 ? (
+        <Text style={styles.emptyBookings}>
+          No bookings yet. Discover chefs to get started!
+        </Text>
+      ) : (
         <>
-          <Text style={styles.sectionTitle}>Booking History</Text>
           {bookings.map((booking) => {
             const statusColor = STATUS_COLORS[booking.status] ?? STATUS_COLORS.pending;
             return (
@@ -343,6 +347,12 @@ const styles = StyleSheet.create({
   bookingMeta: {
     fontSize: 14,
     color: '#6b7280',
+  },
+  emptyBookings: {
+    fontSize: 14,
+    color: '#9ca3af',
+    textAlign: 'center',
+    paddingVertical: 16,
   },
   signOutButton: {
     marginTop: 32,
