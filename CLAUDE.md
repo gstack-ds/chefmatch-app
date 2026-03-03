@@ -126,6 +126,8 @@ chefmatch/
 | 2026-03-02 | Shared screens in src/screens/shared/ | ChatScreen, ConversationListScreen, WriteReviewScreen, ReviewListScreen used by both chef and consumer sides | Duplicate per-role (more code), single screen with role check (same thing) |
 | 2026-03-02 | TextInput for event date in MVP | No date picker dependency needed. Add @react-native-community/datetimepicker before production | DateTimePicker (adds native dep, more setup) |
 | 2026-03-02 | N+1 queries for conversation last message | Fetch latest message per conversation in a loop. Acceptable for MVP with small user base. Optimize with DB view before scaling | Supabase view/RPC (adds migration complexity for MVP) |
+| 2026-03-02 | Unicode emoji tab bar icons | No new deps needed, renders well on iOS/Android. Swap for @expo/vector-icons before production for pixel-perfect icons | @expo/vector-icons (already installed but adds import complexity), custom SVGs (overkill for MVP) |
+| 2026-03-02 | Inline Supabase query for reviewee names | BookingDetailScreens fetch display_name directly from supabase. Acceptable for single-fetch detail screens | Add to booking service (over-abstraction for one query), join in getBooking (complicates mapper) |
 
 ## Gotchas Log
 | Date | Issue | Resolution |
@@ -154,5 +156,7 @@ chefmatch/
 - [ ] Add proper date picker for booking request (replace TextInput)
 - [ ] Optimize conversation list query (replace N+1 with DB view)
 - [ ] Add Supabase RLS policies for all tables
-- [ ] Add tab bar icons (currently all return undefined)
+- [x] Add tab bar icons (Unicode emoji — no new deps)
+- [x] UI polish: auth field labels, confirm password, UX audit fixes
+- [x] Create seed data script (scripts/seed-chefs.ts — 10 test chefs)
 - [ ] Create DB triggers for average_rating/total_reviews/completed_events aggregation
