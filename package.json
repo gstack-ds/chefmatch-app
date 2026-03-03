@@ -12,7 +12,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "expo lint",
-    "setup:storage": "npx ts-node scripts/setup-storage.ts"
+    "setup:storage": "npx ts-node scripts/setup-storage.ts",
+    "seed:chefs": "npx ts-node scripts/seed-chefs.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
