@@ -13,6 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ChefBookingsStackParamList } from '../../navigation/ChefTabNavigator';
 import { BookingStatus } from '../../config/constants';
 import { Booking } from '../../models/types';
+import { useAuth } from '../../hooks/use-auth';
 import { useChefOnboarding } from '../../hooks/use-chef-onboarding';
 import { getBookingsForChef } from '../../services/booking-service';
 
@@ -32,21 +33,22 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 
 export default function ChefBookingsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ChefBookingsStackParamList>>();
+  const { user } = useAuth();
   const { chefProfile } = useChefOnboarding();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchBookings = useCallback(async () => {
-    if (!chefProfile) return;
+    if (!chefProfile || !user) return;
     try {
-      const data = await getBookingsForChef(chefProfile.id);
+      const data = await getBookingsForChef(user.id);
       data.sort((a, b) => (STATUS_ORDER[a.status] ?? 4) - (STATUS_ORDER[b.status] ?? 4));
       setBookings(data);
     } catch {
       // Silently handle — user sees empty list
     }
-  }, [chefProfile]);
+  }, [chefProfile, user]);
 
   useEffect(() => {
     fetchBookings().finally(() => setIsLoading(false));

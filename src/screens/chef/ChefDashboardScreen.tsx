@@ -34,7 +34,7 @@ export default function ChefDashboardScreen() {
     if (!chefProfile || !user) return;
     try {
       const [b, r] = await Promise.all([
-        getBookingsForChef(chefProfile.id),
+        getBookingsForChef(user.id),
         getReviewsForUser(user.id),
       ]);
       setBookings(b);

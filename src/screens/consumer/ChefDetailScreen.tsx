@@ -148,7 +148,7 @@ export default function ChefDetailScreen() {
           style={styles.bookButton}
           onPress={() =>
             navigation.navigate('BookingRequest', {
-              chefId: chef.id,
+              chefId: chef.userId,
               chefName: chef.displayName,
               conversationId: null,
             })

@@ -51,6 +51,7 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const offsetRef = useRef(0);
+  const chefUserIdMap = useRef<Map<string, string>>(new Map());
 
   const loadChefs = useCallback(async (
     excludeIds: string[],
@@ -80,6 +81,7 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
       offsetRef.current = 0;
       setHasMore(true);
       const initialChefs = await loadChefs(existingIds, filters, 0);
+      initialChefs.forEach((c) => chefUserIdMap.current.set(c.id, c.userId));
       setChefs(initialChefs);
       offsetRef.current = initialChefs.length;
     } catch (err) {
@@ -97,9 +99,12 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
   const handleSwipe = useCallback(async (chefId: string, direction: SwipeDirection) => {
     if (!consumerProfile || !user) return;
 
-    // Find the chef to get their userId for the DB insert
+    // Resolve the chef's auth user ID from the stable map
+    const chefUserId = chefUserIdMap.current.get(chefId);
+    if (!chefUserId) return;
+
+    // Snapshot the chef before optimistic removal (for revert)
     const chef = chefs.find((c) => c.id === chefId);
-    const chefUserId = chef?.userId ?? chefId;
 
     // Optimistic remove
     setChefs((prev) => prev.filter((c) => c.id !== chefId));
@@ -109,9 +114,9 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
       await recordSwipe(user.id, chefUserId, direction);
     } catch (err) {
       // Revert on failure
-      setChefs((prev) => {
-        return chef ? [chef, ...prev] : prev;
-      });
+      if (chef) {
+        setChefs((prev) => [chef, ...prev]);
+      }
       setSwipedIds((prev) => prev.filter((id) => id !== chefUserId));
       const message = err instanceof Error ? err.message : 'Failed to record swipe';
       setError(message);
@@ -132,6 +137,7 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
     try {
       const allExcluded = [...swipedIds, ...chefs.map((c) => c.userId)];
       const moreChefs = await loadChefs(allExcluded, filters, offsetRef.current);
+      moreChefs.forEach((c) => chefUserIdMap.current.set(c.id, c.userId));
       setChefs((prev) => [...prev, ...moreChefs]);
       offsetRef.current += moreChefs.length;
     } catch (err) {
