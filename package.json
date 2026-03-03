@@ -12,8 +12,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "expo lint",
-    "setup:storage": "npx ts-node scripts/setup-storage.ts",
-    "seed:chefs": "npx ts-node scripts/seed-chefs.ts"
+    "setup:storage": "npx tsx scripts/setup-storage.ts",
+    "seed:chefs": "npx tsx scripts/seed-chefs.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -47,11 +47,12 @@
     "@testing-library/react-native": "^13.0.0",
     "@types/jest": "^29.5.0",
     "@types/react": "~19.1.0",
+    "dotenv": "^16.4.0",
     "jest": "^29.7.0",
     "jest-expo": "~54.0.0",
     "react-test-renderer": "19.1.0",
-    "dotenv": "^16.4.0",
     "ts-node": "^10.9.0",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.0"
   }
 }
