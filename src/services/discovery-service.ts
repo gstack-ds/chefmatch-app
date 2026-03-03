@@ -31,7 +31,7 @@ export async function fetchDiscoverableChefs(
     .eq('is_live', true);
 
   if (excludeChefIds.length > 0) {
-    query = query.not('id', 'in', `(${excludeChefIds.join(',')})`);
+    query = query.not('user_id', 'in', `(${excludeChefIds.join(',')})`);
   }
 
   if (filters.cuisines.length > 0) {

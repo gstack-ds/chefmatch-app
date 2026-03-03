@@ -74,7 +74,7 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
       const profile = await getConsumerProfile(user.id);
       setConsumerProfile(profile);
 
-      const existingIds = await getSwipedChefIds(profile.id);
+      const existingIds = await getSwipedChefIds(user.id);
       setSwipedIds(existingIds);
 
       offsetRef.current = 0;
@@ -95,21 +95,24 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
   }, [initializeFeed]);
 
   const handleSwipe = useCallback(async (chefId: string, direction: SwipeDirection) => {
-    if (!consumerProfile) return;
+    if (!consumerProfile || !user) return;
+
+    // Find the chef to get their userId for the DB insert
+    const chef = chefs.find((c) => c.id === chefId);
+    const chefUserId = chef?.userId ?? chefId;
 
     // Optimistic remove
     setChefs((prev) => prev.filter((c) => c.id !== chefId));
-    setSwipedIds((prev) => [...prev, chefId]);
+    setSwipedIds((prev) => [...prev, chefUserId]);
 
     try {
-      await recordSwipe(consumerProfile.id, chefId, direction);
+      await recordSwipe(user.id, chefUserId, direction);
     } catch (err) {
       // Revert on failure
       setChefs((prev) => {
-        const chef = chefs.find((c) => c.id === chefId);
         return chef ? [chef, ...prev] : prev;
       });
-      setSwipedIds((prev) => prev.filter((id) => id !== chefId));
+      setSwipedIds((prev) => prev.filter((id) => id !== chefUserId));
       const message = err instanceof Error ? err.message : 'Failed to record swipe';
       setError(message);
       return;
@@ -120,14 +123,14 @@ export function DiscoveryProvider({ children }: { children: React.ReactNode }) {
     if (remainingCount < AUTO_LOAD_THRESHOLD && hasMore && !isLoadingMore) {
       loadMore();
     }
-  }, [consumerProfile, chefs, hasMore, isLoadingMore]);
+  }, [user, consumerProfile, chefs, hasMore, isLoadingMore]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore || !hasMore || !consumerProfile) return;
 
     setIsLoadingMore(true);
     try {
-      const allExcluded = [...swipedIds, ...chefs.map((c) => c.id)];
+      const allExcluded = [...swipedIds, ...chefs.map((c) => c.userId)];
       const moreChefs = await loadChefs(allExcluded, filters, offsetRef.current);
       setChefs((prev) => [...prev, ...moreChefs]);
       offsetRef.current += moreChefs.length;

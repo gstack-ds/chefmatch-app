@@ -71,7 +71,7 @@ describe('fetchDiscoverableChefs', () => {
 
     await discoveryService.fetchDiscoverableChefs(['chef-1', 'chef-2'], DEFAULT_FILTERS);
 
-    expect(chain.not).toHaveBeenCalledWith('id', 'in', '(chef-1,chef-2)');
+    expect(chain.not).toHaveBeenCalledWith('user_id', 'in', '(chef-1,chef-2)');
   });
 
   it('does not call .not when exclude list is empty', async () => {
