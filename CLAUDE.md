@@ -128,6 +128,8 @@ chefmatch/
 | 2026-03-02 | N+1 queries for conversation last message | Fetch latest message per conversation in a loop. Acceptable for MVP with small user base. Optimize with DB view before scaling | Supabase view/RPC (adds migration complexity for MVP) |
 | 2026-03-02 | Unicode emoji tab bar icons | No new deps needed, renders well on iOS/Android. Swap for @expo/vector-icons before production for pixel-perfect icons | @expo/vector-icons (already installed but adds import complexity), custom SVGs (overkill for MVP) |
 | 2026-03-02 | Inline Supabase query for reviewee names | BookingDetailScreens fetch display_name directly from supabase. Acceptable for single-fetch detail screens | Add to booking service (over-abstraction for one query), join in getBooking (complicates mapper) |
+| 2026-03-02 | Use tsx instead of ts-node for scripts | ts-node fails with ERR_UNKNOWN_FILE_EXTENSION under Expo's ESM tsconfig. tsx handles it without extra config | ts-node + tsconfig workarounds (fragile), compile to JS first (extra step) |
+| 2026-03-02 | chefUserIdMap ref for swipe ID resolution | handleSwipe receives chef_profiles.id from UI but needs users.id for DB. A ref Map<profileId, userId> persists across optimistic state removals | Inline lookup on chefs array (fails after optimistic remove), passing userId through all components (too much churn) |
 
 ## Gotchas Log
 | Date | Issue | Resolution |
@@ -136,10 +138,12 @@ chefmatch/
 | 2026-03-02 | Worklets version mismatch (JS 0.7.4 vs native 0.5.1) | Use `npx expo install` to resolve SDK-compatible versions of reanimated, gesture-handler, and worklets. Don't manually pin versions — let Expo resolve them. Add react-native-worklets as explicit dep. |
 | 2026-03-02 | "main has not been registered" crash on launch | With `"main": "./src/App.tsx"` in package.json, we bypass Expo's AppEntry.js wrapper. Must call `registerRootComponent(App)` explicitly in App.tsx. |
 | 2026-03-02 | expo-router causing transform.routerRoot in bundle URL | Uninstall expo-router if not using file-based routing. The param is injected by @expo/metro-config unconditionally but is inert without expo-router installed. |
+| 2026-03-02 | GestureDetector must be descendant of GestureHandlerRootView | Wrap root App component in `<GestureHandlerRootView style={{ flex: 1 }}>`. Must be outermost component (after URL polyfill import). |
+| 2026-03-02 | chef_profiles.id vs users.id FK mismatch in swipes/bookings | All FK columns (consumer_id, chef_id) in swipes, conversations, and bookings reference `users(id)`. Always pass `user.id` (auth UID) or `chef.userId`, never `chefProfile.id` or `consumerProfile.id`. Discovery exclude list must filter by `user_id` column, not `id`. |
 
 ## Current TODOs
-- [ ] Set up Supabase project and configure environment variables
-- [ ] Design database schema (users, chefs, consumers, bookings, reviews, messages)
+- [x] Set up Supabase project and configure environment variables
+- [x] Design database schema (users, chefs, consumers, bookings, reviews, messages)
 - [x] Implement authentication flow (signup/login with Supabase Auth)
 - [x] Build chef onboarding screens (profile creation, photo upload, menu setup)
 - [x] Build swipe-based discovery UI
@@ -152,11 +156,13 @@ chefmatch/
 - [x] Build review and rating system (write review, view reviews)
 - [x] Build chef dashboard (stats, pending bookings, upcoming events, reviews)
 - [x] Create storage bucket setup script (scripts/setup-storage.ts)
-- [ ] Re-add photo requirement for going live before production launch
-- [ ] Add proper date picker for booking request (replace TextInput)
-- [ ] Optimize conversation list query (replace N+1 with DB view)
-- [ ] Add Supabase RLS policies for all tables
 - [x] Add tab bar icons (Unicode emoji — no new deps)
 - [x] UI polish: auth field labels, confirm password, UX audit fixes
 - [x] Create seed data script (scripts/seed-chefs.ts — 10 test chefs)
+- [x] Fix GestureHandlerRootView wrapper in App.tsx
+- [x] Fix profile ID vs auth UID mismatch in swipes/bookings/conversations
+- [ ] Re-add photo requirement for going live before production launch
+- [ ] Add proper date picker for booking request (replace TextInput)
+- [ ] Optimize conversation list query (replace N+1 with DB view)
 - [ ] Create DB triggers for average_rating/total_reviews/completed_events aggregation
+- [ ] End-to-end test: full swipe → match → book → complete → review flow
